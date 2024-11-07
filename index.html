@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obesity Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        label {
+            font-weight: 600;
+            color: #333;
+        }
+        input, select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 300px;
+            font-size: 16px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+        }
+        .help-text {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            max-width: 200px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            border-left: 4px solid #dc3545;
+            color: #dc3545;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Obesity Levels Prediction</h2>
+        <form action="/predict" method="POST" id="predictionForm">
+            <div class="form-group">
+                <label for="Gender">Gender:</label>
+                <select name="Gender" id="Gender" required>
+                    <option value="0">Male</option>
+                    <option value="1">Female</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="Height">Height (in m):</label>
+                <input type="number" 
+                       step="0.01" 
+                       name="Height" 
+                       id="Height"
+                       required 
+                       placeholder="Enter height (e.g., 1.75)" 
+                       min="1.0" 
+                       max="2.5"
+                       oninput="validateHeight(this)">
+                <span class="help-text">Enter height between 1.0 and 2.5 meters</span>
+            </div>
+
+            <div class="form-group">
+                <label for="Weight">Weight (in kg):</label>
+                <input type="number" 
+                       step="0.1" 
+                       name="Weight" 
+                       id="Weight"
+                       required 
+                       placeholder="Enter weight (e.g., 70.5)" 
+                       min="30" 
+                       max="200"
+                       oninput="validateWeight(this)">
+                <span class="help-text">Enter weight between 30 and 200 kg</span>
+            </div>
+
+            <div class="form-group">
+                <label for="FCVC">Frequency of Vegetable Consumption:</label>
+                <input type="number" 
+                       step="1" 
+                       name="FCVC" 
+                       id="FCVC"
+                       required 
+                       placeholder="Enter frequency (1-3)" 
+                       min="1" 
+                       max="3"
+                       oninput="validateFCVC(this)">
+                <span class="help-text">1: Never, 2: Sometimes, 3: Always</span>
+            </div>
+
+            <button type="submit">Predict Obesity Level</button>
+        </form>
+
+        {% if result %}
+            <div class="result">
+                <h3>Prediction: {{ result }}</h3>
+            </div>
+        {% elif error %}
+            <div class="result error">
+                <h3>{{ error }}</h3>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function validateHeight(input) {
+            if (input.value < 1.0 || input.value > 2.5) {
+                input.setCustomValidity('Height must be between 1.0 and 2.5 meters');
+            } else {
+                input.setCustomValidity('');
+            }
+        }
+
+        function validateWeight(input) {
+            if (input.value < 30 || input.value > 200) {
+                input.setCustomValidity('Weight must be between 30 and 200 kg');
+            } else {
+                input.setCustomValidity('');
+            }
+        }
+
+        function validateFCVC(input) {
+            const value = parseFloat(input.value);
+            if (value < 1 || value > 3) {
+                input.setCustomValidity('Frequency must be between 1 and 3');
+            } else if (value % 1 !== 0) {
+                input.setCustomValidity('Please enter a whole number (1, 2, or 3)');
+            } else {
+                input.setCustomValidity('');
+            }
+        }
+    </script>
+</body>
+</html>
