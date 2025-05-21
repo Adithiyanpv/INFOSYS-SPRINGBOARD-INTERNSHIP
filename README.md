@@ -35,7 +35,8 @@ obesity-prediction/
 
 # Live Demo:
 
-Visit our deployed web app at:  https://obesity-level-prediction-web-app.onrender.com
+Visit our deployed web app at: https://predicting-obesity-levels.onrender.com/ <br>
+Also at: https://obesity-level-prediction-web-app.onrender.com
 
 ## Features
 
